@@ -1,0 +1,22 @@
+.tableContainer {
+  overflow-x: auto;
+  padding: 0 15px;
+}
+
+.table {
+  width: 100%;
+  text-align: center;
+  border-collapse: collapse;
+}
+
+.tableHeader, .tableBody {
+  border: 1px solid grey
+}
+
+.tableHeaderData {
+  padding: 8px 0; 
+}
+
+.tableBodyData {
+  padding: 6px 0;
+}

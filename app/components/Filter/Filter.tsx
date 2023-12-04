@@ -1,31 +1,33 @@
-import { ChangeEvent, FormEvent, SetStateAction, useState, Dispatch } from 'react';
+import { SetStateAction, Dispatch } from 'react';
 import axios from 'axios';
 import { Stock } from '../../utils/interfaces';
 import styles from './styles.module.scss';
+import { useForm, SubmitHandler } from 'react-hook-form';
 
-const Filter = ({ setStockData }: { setStockData: Dispatch<SetStateAction<Stock[]>> }) => {
-  const [exchangeFilter, setExchangeFilter] = useState<string>('');
-  const [symbolFilter, setSymbolFilter] = useState<string>('');
+interface FilterFormData {
+  symbol: string;
+  exchange: string;
+};
 
-  const handleExchangeChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setExchangeFilter(e.target.value);
-  };
 
-  const handleSymbolChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setSymbolFilter(e.target.value);
-  };
+const Filter = ({ setStockData }: { setStockData: Dispatch<SetStateAction<Stock[] | undefined>> }) => {
+  const { register, handleSubmit, formState: { errors } } = useForm<FilterFormData>({
+    defaultValues: {
+      symbol: '',
+      exchange: ''
+    }
+  });
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const onSubmit: SubmitHandler<FilterFormData> = (data, e) => {
+    e?.preventDefault();
 
     axios.get('/api/stocks', {
       params: {
-        symbol: symbolFilter.toUpperCase(),
-        exchange: exchangeFilter.toUpperCase()
+        symbol: data.symbol.toUpperCase(),
+        exchange: data.exchange.toUpperCase()
       }
     })
       .then(res => {
-        console.log(res);
         setStockData(res.data.data);
       });
 
@@ -35,15 +37,15 @@ const Filter = ({ setStockData }: { setStockData: Dispatch<SetStateAction<Stock[
     <div className={styles.filtersMain}>
       <div className={styles.filterContainer}>
         <h4>Filtros</h4>
-        <form onSubmit={handleSubmit} className={styles.form}>
+        <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
           <div className={styles.formContainer}>
             <div className={styles.nameContainer}>
               <label className={styles.nameLabel}>Exchange:</label>
-              <input className={styles.nameInput} value={exchangeFilter} onChange={handleExchangeChange} type='text' />
+              <input className={styles.nameInput} type='text' {...register('exchange')} />
             </div>
             <div className={styles.symbolContainer}>
               <label className={styles.symbolLabel}>Simbolo:</label>
-              <input className={styles.symbolInput} value={symbolFilter} onChange={handleSymbolChange} type='text' />
+              <input className={styles.symbolInput} type='text' {...register('symbol', {required: '*El campo Simbolo es obligatorio'})} />
             </div>
             <div className={styles.submitContainer}>
               <button type='submit' className={styles.submitButton}>
@@ -51,6 +53,7 @@ const Filter = ({ setStockData }: { setStockData: Dispatch<SetStateAction<Stock[
               </button>
             </div>
           </div>
+          {errors.symbol && <div className={styles.errorMessage}>{errors.symbol.message}</div>}
         </form>
       </div>
     </div>

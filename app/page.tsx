@@ -7,13 +7,15 @@ import Table from './components/Table/Table';
 import styles from './page.module.scss'
 
 const Home = () => {
-  const [stockData, setStockData] = useState<Stock[]>([]);
+  const [stockData, setStockData] = useState<Stock[] | undefined>(undefined);
 
   return (
     <section>
       <Filter setStockData={setStockData} />
 
-      <Table stockData={stockData}/>
+      {
+        stockData && <Table stockData={stockData}/>
+      }
     </section>
   )
 };

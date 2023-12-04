@@ -1,0 +1,76 @@
+.formContainer {
+  margin-top: 20px;
+  padding: 0 16px;
+}
+
+.formData {
+  display: grid;
+  grid-template-areas: "time . ." "historic startDate endDate" "interval option ." "error . submit";
+  gap: 15px;
+  padding: 10px 15px 20px;
+  border: 1px solid grey;
+  border-radius: 4px;
+}
+
+.timeCell {
+  grid-area: time;
+}
+
+.historicCell {
+  grid-area: historic;
+}
+
+.startCell {
+  grid-area: startDate;
+
+  label {
+    margin-left: 5px;
+  }
+}
+
+.endCell {
+  grid-area: endDate;
+
+  label {
+    margin-left: 5px;
+  }
+}
+
+.intervalCell {
+  grid-area: interval;
+
+  label {
+    margin-left: 22px;
+  }
+}
+
+.optionCell {
+  grid-area: option;
+
+  select {
+    width: 182px;
+  }
+}
+
+.errorCell {
+  grid-area: error;
+
+  span {
+    color: red;
+  }
+}
+
+.submitCell {
+  grid-area: submit;
+  display: flex;
+  justify-content: flex-end;
+
+  button {
+    background-color: #000066;
+    color: white;
+    padding: 8px 24px;
+    border-radius: 8%;
+    border: none;
+    cursor: pointer;
+  }
+}

@@ -1,5 +1,6 @@
-import type { Metadata } from 'next'
-import './globals.scss'
+import type { Metadata } from 'next';
+import Link from 'next/link';
+import './globals.scss';
 
 export const metadata: Metadata = {
   title: 'Stock App',
@@ -15,7 +16,7 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <header className='header'>
-          <h2 className='title'>Stocks</h2>
+          <Link href='/'><h2 className='title'>Stocks</h2></Link>
         </header>
         <main className='main'>
         {children}

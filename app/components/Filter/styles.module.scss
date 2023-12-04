@@ -4,7 +4,7 @@
 }
 
 .filterContainer {
-  padding: 6px;
+  padding: 6px 10px;
   border-radius: 4px;
   border: 1px solid grey;
 }
@@ -52,7 +52,6 @@
 }
 
 .submitContainer {
-  
 
   .submitButton {
     background-color: #000066;
@@ -62,4 +61,9 @@
     border: none;
     cursor: pointer;
   }
+}
+
+.errorMessage {
+  color: red;
+  margin-top: 20px;
 }

@@ -7,7 +7,7 @@ export async function GET(request: NextRequest) {
   const exchange = searchParams.get('exchange');
 
   const symbolQuery = symbol ? `&symbol=${symbol}` : '';
-  const exchangeQuery = exchange ? `&exchange=${exchange}` : ''
+  const exchangeQuery = exchange ? `&exchange=${exchange}` : '';
 
   const res = await axios.get('https://api.twelvedata.com/stocks?source=docs' + symbolQuery + exchangeQuery, {
     headers: {

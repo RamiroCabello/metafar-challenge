@@ -21,7 +21,7 @@ const DetailsPanel = ({ symbol, exchange }: { symbol: string, exchange: string }
   return (
     <div className={styles.detailsContainer}>
       <div className={styles.detailsData}>
-        <div className={styles.detailsCell}>Simbolo: {stockDetails?.symbol}</div>
+        <div className={styles.detailsCell}>Símbolo: {stockDetails?.symbol}</div>
         <div className={styles.detailsCell}>Nombre: {stockDetails?.name}</div>
         <div className={styles.detailsCell}>Exchange: {stockDetails?.exchange}</div>
         <div className={styles.detailsCell}>País: {stockDetails?.country}</div>

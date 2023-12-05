@@ -7,6 +7,10 @@
   padding: 6px 10px;
   border-radius: 4px;
   border: 1px solid grey;
+
+  h4 {
+    text-decoration: underline;
+  }
 }
 
 .form {
@@ -19,48 +23,30 @@
   justify-content: space-between;
 }
 
-.nameContainer {
-  width: 35%;
-  display: flex;
-  justify-content: space-around;
-
-  .nameLabel {
-
-  }
-
-  .nameInput {
-    width: 50%;
-    border-radius: 2%;
-    border:2px solid #767676;
-  }
-}
-
+.nameContainer,
 .symbolContainer {
   width: 35%;
   display: flex;
   justify-content: space-around;
-
-  .symbolLabel {
-
-  }
-
-  .symbolInput {
-    width: 50%;
-    border-radius: 2%;
-    border:2px solid #767676;
-  }
+  align-items: center;
 }
 
-.submitContainer {
+.nameInput,
+.symbolInput {
+  width: 50%;
+  height: 60%;
+  border-radius: 4px;
+  border: 2px solid #767676;
+}
 
-  .submitButton {
-    background-color: #000066;
-    color: white;
-    padding: 8px 24px;
-    border-radius: 8%;
-    border: none;
-    cursor: pointer;
-  }
+
+.submitButton {
+  background-color: #000066;
+  color: white;
+  padding: 8px 24px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
 }
 
 .errorMessage {

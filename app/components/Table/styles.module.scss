@@ -9,14 +9,65 @@
   border-collapse: collapse;
 }
 
-.tableHeader, .tableBody {
-  border: 1px solid grey
+.tableHeader,
+.tableBody {
+  border: 1px solid grey;
+}
+
+.tableHeader {
+  background-color: #f2f2f2;
+}
+
+.tableBody {
+  tr {
+    &:hover {
+      background-color: #e6e6e6;
+    }
+  }
 }
 
 .tableHeaderData {
-  padding: 8px 0; 
+  padding: 8px 0;
 }
 
 .tableBodyData {
   padding: 6px 0;
+}
+
+.paginationContainer {
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px;
+  border: 1px solid grey;
+  border-top: none;
+}
+
+.paginationControll {
+  margin-right: 15px;
+
+  .pageNumber {
+    margin-right: 15px;    
+  }
+
+  .pageBack, .pageNext {
+    padding: 2px 8px;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #cccccc;
+      border-radius: 10px;
+    }
+  }
+
+  .pageBack {
+    margin-right: 5px;
+  }
+
+  .pageNext {
+    margin-left: 5px;
+  }
+}
+
+.disabled {
+  pointer-events: none;
 }

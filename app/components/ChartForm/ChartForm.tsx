@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import { SetStateAction, useEffect, useRef, Dispatch } from "react";
 import styles from './styles.module.scss';
 import axios from 'axios';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { SelectOption} from '../../utils/interfaces';
+import { SelectOption, StockPriceData} from '../../utils/interfaces';
 
 const options: SelectOption[] = [
   { label: '1 min', value: '1min' },
@@ -17,30 +17,58 @@ interface FormData {
   interval: string;
 };
 
-const ChartForm = ({ symbol, exchange }: { symbol: string, exchange: string }) => {
+const ChartForm = ({ symbol, setStockPrice }: { symbol: string, setStockPrice: Dispatch<SetStateAction<StockPriceData[] | undefined>> }) => {
+  const realTimeInterval = useRef<NodeJS.Timeout>();
   const { register, handleSubmit, getValues, formState: { errors } } = useForm<FormData>({
     defaultValues: {
       radio: 'REALTIME',
-      startDate: new Date().toISOString().slice(0, 16),
+      startDate: '',
       endDate: '',
       interval: '1min'
     }
   });
 
+  const validateDate = (option: string, date: string) =>
+    option === 'HISTORIC' ? date.replace('T', ' ') + ':00'  : undefined;
+
+  const formatInterval = (interval: string) => {
+    switch (interval ) {
+      case '1min': return 60000;
+      case '5min': return 300000;
+      case '15min': return 900000;
+    }
+  };
+
+  const setRealTimeInterval = (data: FormData) => {
+    realTimeInterval.current = setInterval(() => {
+
+      axios.post('/api/stockPrice', {
+        symbol: symbol,
+        interval: data.interval,
+      })
+        .then(res => 
+          setStockPrice(res.data.values ? res.data.values : [])
+        );
+
+    }, formatInterval(data.interval));
+  };
+
+
   const onSubmit: SubmitHandler<FormData> = (data, e) => {
     e?.preventDefault();
-    console.log(data);
 
     axios.post('/api/stockPrice', {
       symbol: symbol,
       interval: data.interval,
-      exchange: exchange,
-      startDate: data.startDate.replace('T', ' ') + ':00',
-      endDate: data.endDate.replace('T', ' ') + ':00',
+      startDate: validateDate(data.radio, data.startDate),
+      endDate: validateDate(data.radio, data.endDate),
     })
       .then(res => {
-        console.log(res.data.values);
-      })
+        setStockPrice(res.data.values ? res.data.values : []);
+
+        if (data.radio === 'REALTIME') setRealTimeInterval(data)
+        else clearInterval(realTimeInterval.current);
+      });
   };
 
   return (
@@ -55,20 +83,31 @@ const ChartForm = ({ symbol, exchange }: { symbol: string, exchange: string }) =
           <input type="radio" value="HISTORIC" id="historic" {...register('radio', { required: true })} />
           <label htmlFor="historic">Histórico:</label>
         </div>
-
         <div className={styles.startCell}>
-          <input type="datetime-local" id="startDate" {...register('startDate')} />
+          <input 
+            type="datetime-local" 
+            id="startDate" 
+            {...register('startDate', {
+              validate: (value) => (getValues("radio") === 'HISTORIC')
+                ? value !== '' || '*La primera fecha es obligatoria'
+                : true
+            })} 
+          />
           <label htmlFor="startDate">(desde)</label>
         </div>
-
         <div className={styles.endCell}>
           <input
             type="datetime-local"
             id="endDate"
             {...register('endDate', {
-              validate: (value) => (getValues("radio") === 'HISTORIC' && value !== '') 
-                ? getValues('startDate') < value || '*La segunda fecha debe ser mayor a la primera' 
-                : true
+              validate: {
+                historicValidate: (value) => (getValues("radio") === 'HISTORIC')
+                  ? value !== '' || '*La segunda fecha es obligatoria'
+                  : true,
+                greatearThan: (value) => (getValues("radio") === 'HISTORIC' && value !== '') 
+                  ? getValues('startDate') < value || '*La segunda fecha debe ser mayor a la primera' 
+                  : true
+              } 
             })}
           />
           <label htmlFor="endDate">(hasta)</label>
@@ -77,7 +116,6 @@ const ChartForm = ({ symbol, exchange }: { symbol: string, exchange: string }) =
         <div className={styles.intervalCell}>
           <label htmlFor="interval">Intervalo:</label>
         </div>
-
         <div className={styles.optionCell}>
           <select id="interval" {...register('interval', { required: true })}>
             {
@@ -90,6 +128,7 @@ const ChartForm = ({ symbol, exchange }: { symbol: string, exchange: string }) =
         </div>
 
         <div className={styles.errorCell}>
+          {errors.startDate && <span>{errors.startDate.message}</span>}
           {errors.endDate && <span>{errors.endDate.message}</span>}
         </div>
         <div className={styles.submitCell}>

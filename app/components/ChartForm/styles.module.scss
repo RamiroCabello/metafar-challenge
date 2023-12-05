@@ -26,6 +26,10 @@
   label {
     margin-left: 5px;
   }
+
+  input {
+    padding: 2px;
+  }
 }
 
 .endCell {
@@ -33,6 +37,10 @@
 
   label {
     margin-left: 5px;
+  }
+
+  input {
+    padding: 2px;
   }
 }
 
@@ -49,6 +57,7 @@
 
   select {
     width: 182px;
+    padding: 2px;
   }
 }
 
@@ -57,6 +66,7 @@
 
   span {
     color: red;
+    margin-right: 5px;
   }
 }
 
@@ -69,7 +79,7 @@
     background-color: #000066;
     color: white;
     padding: 8px 24px;
-    border-radius: 8%;
+    border-radius: 6px;
     border: none;
     cursor: pointer;
   }

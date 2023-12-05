@@ -13,7 +13,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
+    <html lang="es-AR">
       <body>
         <header className='header'>
           <Link href='/'><h2 className='title'>Stocks</h2></Link>
@@ -21,9 +21,6 @@ export default function RootLayout({
         <main className='main'>
         {children}
         </main>
-        <footer className='footer'>
-          <p className='copyright'>©2023 metafar - All rights reserved</p>
-        </footer>
       </body>
     </html>
   )
